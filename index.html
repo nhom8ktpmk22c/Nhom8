@@ -11,28 +11,29 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
         .sidebar-active { background-color: #0a66c2; color: white; border-radius: 9999px; }
-        .kpi-card { transition: all 0.3s; }
-        .kpi-card:hover { transform: translateY(-4px); }
+        .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
     </style>
 </head>
 <body class="bg-gray-50">
 
-<header class="bg-white border-b sticky top-0 z-50">
-    <div class="max-w-screen-2xl mx-auto px-6 py-4 flex items-center justify-between">
+<header class="bg-white border-b sticky top-0 z-50 shadow-sm">
+    <div class="max-w-screen-2xl mx-auto px-8 py-4 flex items-center justify-between">
         <div class="flex items-center gap-3">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Samsung_Logo.svg/2560px-Samsung_Logo.svg.png" alt="Samsung" class="h-9">
             <span class="text-2xl font-bold text-[#0a66c2]">Samsung QMS</span>
         </div>
         <div class="flex-1 max-w-xl mx-8">
-            <input type="text" placeholder="Search records, NCRs, or devices..." 
+            <input type="text" id="global-search" placeholder="Search records, NCRs, or devices..." 
                    class="w-full bg-gray-100 border border-gray-200 rounded-3xl px-5 py-3 text-sm focus:outline-none focus:border-blue-500">
         </div>
         <div class="flex items-center gap-6">
-            <i class="fa-solid fa-bell text-xl cursor-pointer"></i>
+            <i class="fa-solid fa-bell text-xl cursor-pointer relative">
+                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">3</span>
+            </i>
             <div class="flex items-center gap-3">
-                <div class="text-right text-sm">
-                    <p class="font-semibold">Admin User</p>
-                    <p class="text-gray-500 text-xs">Quality Assurance</p>
+                <div class="text-right">
+                    <p class="font-semibold text-sm">Admin User</p>
+                    <p class="text-xs text-gray-500">Quality Assurance</p>
                 </div>
                 <i class="fa-solid fa-circle-user text-3xl"></i>
             </div>
@@ -42,145 +43,171 @@
 
 <div class="flex max-w-screen-2xl mx-auto">
     <!-- SIDEBAR -->
-    <div class="w-64 bg-white border-r min-h-screen py-6 px-4">
+    <div class="w-64 bg-white border-r min-h-screen py-6 px-4 text-sm">
         <nav class="space-y-1">
-            <a onclick="navigate(0)" id="nav-0" class="flex items-center gap-3 px-5 py-3 sidebar-active cursor-pointer">
-                <i class="fa-solid fa-house"></i> Dashboard
-            </a>
-            <a onclick="navigate(1)" id="nav-1" class="flex items-center gap-3 px-5 py-3 hover:bg-gray-100 cursor-pointer">
-                <i class="fa-solid fa-clipboard-check"></i> QC Inspection
-            </a>
-            <a onclick="navigate(2)" id="nav-2" class="flex items-center gap-3 px-5 py-3 hover:bg-gray-100 cursor-pointer">
-                <i class="fa-solid fa-triangle-exclamation"></i> NCR / CAPA
-            </a>
-            <a onclick="navigate(3)" id="nav-3" class="flex items-center gap-3 px-5 py-3 hover:bg-gray-100 cursor-pointer">
-                <i class="fa-solid fa-archive"></i> Records Archive
-            </a>
-            <a onclick="navigate(4)" id="nav-4" class="flex items-center gap-3 px-5 py-3 hover:bg-gray-100 cursor-pointer">
-                <i class="fa-solid fa-microchip"></i> Device & AI
-            </a>
+            <a onclick="navigate(0)" id="nav-0" class="flex items-center gap-3 px-5 py-3 sidebar-active cursor-pointer"><i class="fa-solid fa-house w-5"></i> Dashboard</a>
+            <a onclick="navigate(1)" id="nav-1" class="flex items-center gap-3 px-5 py-3 hover:bg-gray-100 cursor-pointer"><i class="fa-solid fa-clipboard-check w-5"></i> QC Inspection</a>
+            <a onclick="navigate(2)" id="nav-2" class="flex items-center gap-3 px-5 py-3 hover:bg-gray-100 cursor-pointer"><i class="fa-solid fa-triangle-exclamation w-5"></i> NCR / CAPA</a>
+            <a onclick="navigate(3)" id="nav-3" class="flex items-center gap-3 px-5 py-3 hover:bg-gray-100 cursor-pointer"><i class="fa-solid fa-archive w-5"></i> Records Archive</a>
+            <a onclick="navigate(4)" id="nav-4" class="flex items-center gap-3 px-5 py-3 hover:bg-gray-100 cursor-pointer"><i class="fa-solid fa-microchip w-5"></i> Device & AI</a>
         </nav>
+        <div class="absolute bottom-8 px-5 text-xs text-gray-400">© 2024 Samsung Electronics Vietnam • System Online</div>
     </div>
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN -->
     <div class="flex-1 p-8" id="main-content">
 
-        <!-- DASHBOARD (Tab 0) -->
+        <!-- ==================== DASHBOARD ==================== -->
         <div id="tab-0">
-            <div class="flex justify-between items-center mb-8">
-                <h1 class="text-3xl font-bold">Tổng quan Chất Lượng</h1>
-                <div class="flex gap-3">
-                    <button class="px-6 py-3 border rounded-3xl text-sm font-medium">Xuất báo cáo</button>
-                    <button onclick="navigate(1)" class="bg-[#0a66c2] text-white px-6 py-3 rounded-3xl text-sm font-medium flex items-center gap-2">
-                        <i class="fa-solid fa-plus"></i> Bắt đầu QC mới
-                    </button>
-                </div>
-            </div>
+            <h1 class="text-3xl font-bold mb-1">Tổng quan Chất Lượng</h1>
+            <p class="text-gray-500 mb-8">Giám sát hiệu suất vận hành thời gian thực trên toàn hệ thống</p>
 
-            <!-- KPI Cards -->
             <div class="grid grid-cols-4 gap-6">
                 <div class="bg-white rounded-3xl p-6 kpi-card">
                     <p class="text-sm text-gray-500">Tỷ lệ Yield (FPY)</p>
-                    <p class="text-5xl font-bold text-green-600 mt-2">98.42%</p>
-                    <p class="text-green-600 text-sm mt-4">↑ +1.2%</p>
+                    <p class="text-5xl font-bold text-green-600">98.42%</p>
+                    <p class="text-green-600 text-sm mt-2">↑ +1.2% so với ca trước</p>
                 </div>
                 <div class="bg-white rounded-3xl p-6 kpi-card">
                     <p class="text-sm text-gray-500">NCR Đang xử lý</p>
-                    <p class="text-5xl font-bold text-orange-600 mt-2">12</p>
-                    <p class="text-orange-600 text-sm mt-4">6 lỗi nghiêm trọng</p>
+                    <p class="text-5xl font-bold text-orange-600">12</p>
+                    <p class="text-orange-600 text-sm mt-2">6 lỗi nghiêm trọng trong 5 lô</p>
                 </div>
                 <div class="bg-white rounded-3xl p-6 kpi-card">
                     <p class="text-sm text-gray-500">Tiến độ CAPA</p>
-                    <p class="text-5xl font-bold text-blue-600 mt-2">85%</p>
-                    <p class="text-blue-600 text-sm mt-4">Vượt chỉ tiêu hoàn thành tuần</p>
+                    <p class="text-5xl font-bold text-blue-600">85%</p>
+                    <p class="text-blue-600 text-sm mt-2">Vượt chỉ tiêu hoàn thành tuần</p>
                 </div>
                 <div class="bg-white rounded-3xl p-6 kpi-card">
                     <p class="text-sm text-gray-500">Dự báo Chất lượng</p>
-                    <p class="text-5xl font-bold text-purple-600 mt-2">94/100</p>
-                    <p class="text-purple-600 text-sm mt-4">Độ tin cậy hệ thống rất cao</p>
+                    <p class="text-5xl font-bold text-purple-600">94/100</p>
+                    <p class="text-purple-600 text-sm mt-2">Độ tin cậy hệ thống rất cao</p>
                 </div>
             </div>
 
-            <!-- Line Chart -->
-            <div class="mt-10 bg-white rounded-3xl p-8">
-                <div class="flex justify-between mb-6">
-                    <h3 class="font-semibold">Xu hướng chất lượng thời gian thực</h3>
-                    <span class="text-xs bg-green-100 text-green-700 px-4 py-1 rounded-3xl">Live</span>
+            <div class="mt-10 grid grid-cols-12 gap-6">
+                <!-- Biểu đồ -->
+                <div class="col-span-8 bg-white rounded-3xl p-8">
+                    <div class="flex justify-between mb-6">
+                        <h3 class="font-semibold">Xu hướng chất lượng thời gian thực</h3>
+                        <span class="bg-green-100 text-green-700 px-4 py-1 rounded-3xl text-xs font-medium">Live</span>
+                    </div>
+                    <canvas id="yieldChart" class="h-80"></canvas>
                 </div>
-                <canvas id="yieldChart" class="h-80"></canvas>
+
+                <!-- Phân tích AI & Cảnh báo -->
+                <div class="col-span-4 space-y-6">
+                    <div class="bg-white rounded-3xl p-6">
+                        <h4 class="font-semibold mb-4">Phân tích AI & Bất thường</h4>
+                        <div class="space-y-4 text-sm">
+                            <div class="flex gap-3 bg-red-50 p-3 rounded-2xl">
+                                <span class="text-red-600 font-medium">LINE B1</span>
+                                <span>Nhiệt độ lò hàn vượt ngưỡng (265°C)</span>
+                            </div>
+                            <div class="flex gap-3 bg-amber-50 p-3 rounded-2xl">
+                                <span class="text-amber-600 font-medium">LINE B2</span>
+                                <span>Tỷ lệ lỗi ngoại quan tăng 5%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-3xl p-6 text-center">
+                        <button onclick="runAI()" class="bg-[#0a66c2] text-white w-full py-4 rounded-3xl font-medium">Xác nhận & Kiểm tra ngay</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phân bố lỗi & Thao tác nhanh -->
+            <div class="grid grid-cols-2 gap-6 mt-10">
+                <div class="bg-white rounded-3xl p-8">
+                    <h4 class="font-semibold mb-6">Phân bố lỗi theo Dây chuyền</h4>
+                    <div class="space-y-5">
+                        <div class="flex items-center gap-4"><span class="w-20">Line B1</span><div class="h-3 bg-green-500 flex-1 rounded"></div><span class="text-sm font-medium">87%</span></div>
+                        <div class="flex items-center gap-4"><span class="w-20">Line B2</span><div class="h-3 bg-green-400 flex-1 rounded"></div><span class="text-sm font-medium">62%</span></div>
+                        <div class="flex items-center gap-4"><span class="w-20">Line A1</span><div class="h-3 bg-green-500 flex-1 rounded-full"></div><span class="text-sm font-medium">94%</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-8">
+                    <h4 class="font-semibold mb-6">Thao tác nhanh</h4>
+                    <div class="grid grid-cols-3 gap-4 text-center text-sm">
+                        <div onclick="navigate(1)" class="cursor-pointer p-4 hover:bg-gray-100 rounded-2xl">Hồ sơ Kiểm tra</div>
+                        <div onclick="navigate(2)" class="cursor-pointer p-4 hover:bg-gray-100 rounded-2xl">Báo cáo NCR</div>
+                        <div onclick="navigate(4)" class="cursor-pointer p-4 hover:bg-gray-100 rounded-2xl">Cấu hình AI</div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- QC Inspection (Tab 1) -->
+        <!-- ==================== QC INSPECTION ==================== -->
         <div id="tab-1" class="hidden">
             <h1 class="text-3xl font-bold mb-6">QC Inspection</h1>
             <div class="flex gap-8">
-                <!-- Lot List -->
-                <div class="w-80 bg-white rounded-3xl p-6 space-y-4">
-                    <h3 class="font-semibold">Lô hàng Active</h3>
-                    <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 cursor-pointer">
-                        <p class="font-medium">Galaxy S24 Frame</p>
-                        <p class="text-xs text-gray-500">B-20240520-01</p>
+                <!-- Danh sách lô -->
+                <div class="w-80 bg-white rounded-3xl p-6">
+                    <h3 class="font-semibold mb-4">Lô hàng Active</h3>
+                    <div class="space-y-4">
+                        <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4">Galaxy S24 Frame • B-20240520-01</div>
+                        <div class="p-4 hover:bg-gray-100 rounded-2xl">AMOLED Display Module • B-20240520-04</div>
                     </div>
-                    <!-- Thêm các lô khác nếu cần -->
                 </div>
 
-                <!-- Measurement Table -->
+                <!-- Bảng đo lường -->
                 <div class="flex-1 bg-white rounded-3xl p-8">
                     <h3 class="font-semibold mb-6">Dữ liệu đo lường kỹ thuật</h3>
                     <table class="w-full text-sm">
-                        <thead>
-                            <tr class="border-b text-left">
-                                <th class="pb-4">Chỉ tiêu</th>
-                                <th class="pb-4">Tiêu chuẩn</th>
-                                <th class="pb-4">LCL - UCL</th>
-                                <th class="pb-4">Giá trị thực tế</th>
-                                <th class="pb-4 text-center">Trạng thái</th>
-                            </tr>
-                        </thead>
+                        <thead><tr class="border-b"><th class="text-left py-4">Chỉ tiêu</th><th class="text-left py-4">Tiêu chuẩn</th><th class="text-left py-4">LCL - UCL</th><th class="text-left py-4">Giá trị thực tế</th><th class="text-center py-4">Trạng thái</th></tr></thead>
                         <tbody id="qc-table" class="divide-y"></tbody>
                     </table>
+
+                    <div class="mt-10 grid grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="font-semibold mb-4">Kiểm tra ngoại quan (Visual Check)</h4>
+                            <div class="space-y-3">
+                                <label class="flex items-center gap-2"><input type="checkbox" checked class="accent-blue-600"> Tình trạng bề mặt</label>
+                                <label class="flex items-center gap-2"><input type="checkbox" class="accent-blue-600"> Độ phủ lớp mạ</label>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-4">Ghi chú & Cảnh báo bất thường</h4>
+                            <textarea class="w-full border rounded-2xl p-4 text-sm" rows="3" placeholder="Nhập ghi chú..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 flex gap-4">
+                        <button onclick="createNCR()" class="flex-1 bg-red-600 text-white py-4 rounded-3xl font-medium">Tạo NCR</button>
+                        <button class="flex-1 bg-blue-600 text-white py-4 rounded-3xl font-medium">Gửi báo cáo QC</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- NCR / CAPA (Tab 2) - Kanban -->
+        <!-- ==================== NCR / CAPA ==================== -->
         <div id="tab-2" class="hidden">
             <h1 class="text-3xl font-bold mb-6">Quản lý NCR / CAPA</h1>
-            <div class="grid grid-cols-4 gap-6">
-                <div class="bg-white rounded-3xl p-6">Mới nhận (New)</div>
-                <div class="bg-white rounded-3xl p-6">Điều tra (Investigation)</div>
-                <div class="bg-white rounded-3xl p-6">Lập kế hoạch (Plan)</div>
-                <div class="bg-white rounded-3xl p-6">Xác minh (Verification)</div>
-            </div>
+            <div class="grid grid-cols-4 gap-6" id="kanban"></div>
         </div>
 
-        <!-- Records Archive (Tab 3) -->
+        <!-- ==================== RECORDS ARCHIVE ==================== -->
         <div id="tab-3" class="hidden">
             <h1 class="text-3xl font-bold mb-6">Lưu trữ Hồ sơ Kiểm tra</h1>
-            <div class="bg-white rounded-3xl p-8">
-                <!-- Summary KPIs -->
-                <div class="grid grid-cols-4 gap-6 mb-10">
-                    <div class="text-center"><p class="text-4xl font-bold">12,845</p><p class="text-sm text-gray-500">Tổng hồ sơ</p></div>
-                    <div class="text-center"><p class="text-4xl font-bold text-green-600">98.2%</p><p class="text-sm text-gray-500">Tỷ lệ Pass trung bình</p></div>
-                    <div class="text-center"><p class="text-4xl font-bold text-red-600">231</p><p class="text-sm text-gray-500">Hồ sơ lỗi (NCR)</p></div>
-                    <div class="text-center"><p class="text-4xl font-bold">4,200</p><p class="text-sm text-gray-500">Đã Audit</p></div>
-                </div>
-                <!-- Bảng dữ liệu sẽ được JS sinh -->
-                <table class="w-full" id="records-table"></table>
+            <div class="grid grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-3xl p-6 text-center"><p class="text-4xl font-bold">12,845</p><p class="text-xs text-gray-500">Tổng hồ sơ</p></div>
+                <div class="bg-white rounded-3xl p-6 text-center"><p class="text-4xl font-bold text-green-600">98.2%</p><p class="text-xs text-gray-500">Tỷ lệ Pass trung bình</p></div>
+                <div class="bg-white rounded-3xl p-6 text-center"><p class="text-4xl font-bold text-red-600">231</p><p class="text-xs text-gray-500">Hồ sơ lỗi NCR</p></div>
+                <div class="bg-white rounded-3xl p-6 text-center"><p class="text-4xl font-bold">4,200</p><p class="text-xs text-gray-500">Đã Audit</p></div>
             </div>
+            <div class="bg-white rounded-3xl overflow-hidden" id="records-table-container"></div>
         </div>
 
-        <!-- Device & AI (Tab 4) -->
+        <!-- ==================== DEVICE & AI ==================== -->
         <div id="tab-4" class="hidden">
             <h1 class="text-3xl font-bold mb-6">Cấu hình Thiết bị & AI</h1>
-            <div class="grid grid-cols-3 gap-6" id="device-grid"></div>
+            <div class="grid grid-cols-3 gap-6" id="device-list"></div>
         </div>
     </div>
 </div>
 
 <script>
-    // Navigation
     function navigate(tab) {
         document.querySelectorAll('#main-content > div').forEach(d => d.classList.add('hidden'));
         document.getElementById(`tab-${tab}`).classList.remove('hidden');
@@ -188,40 +215,71 @@
         document.getElementById(`nav-${tab}`).classList.add('sidebar-active');
     }
 
-    // Chart.js cho Dashboard
+    // Chart
     function createYieldChart() {
-        const ctx = document.getElementById('yieldChart');
-        new Chart(ctx, {
+        new Chart(document.getElementById('yieldChart'), {
             type: 'line',
             data: {
                 labels: ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00'],
-                datasets: [{
-                    label: 'Yield Rate (%)',
-                    data: [97.8, 98.1, 98.5, 96.9, 97.4, 98.3, 98.7, 98.4],
-                    borderColor: '#0a66c2',
-                    tension: 0.4,
-                    fill: true,
-                    backgroundColor: 'rgba(10, 102, 194, 0.1)'
-                }]
+                datasets: [{ label: 'Yield Rate (%)', data: [97.8,98.1,98.5,96.9,97.4,98.3,98.7,98.4], borderColor: '#0a66c2', tension: 0.4, fill: true, backgroundColor: 'rgba(10,102,194,0.1)' }]
             },
-            options: { plugins: { legend: { display: false } }, scales: { y: { min: 95, max: 100 } } }
+            options: { plugins: { legend: { display: false } }, scales: { y: { min: 95, max: 100 } }}
         });
     }
 
     // QC Table
     function renderQCTable() {
-        const tbody = document.getElementById('qc-table');
-        tbody.innerHTML = `
-            <tr><td class="py-4">Độ dày khung viền</td><td>7.60</td><td>7.55-7.65</td><td>7.62</td><td class="text-center text-green-600 font-medium">OK</td></tr>
-            <tr><td class="py-4">Trở kháng pin</td><td>15.0</td><td>12-18</td><td>19.2</td><td class="text-center text-red-600 font-medium">NG</td></tr>
+        document.getElementById('qc-table').innerHTML = `
+            <tr><td class="py-4">Độ dày khung viền</td><td>7.60 mm</td><td>7.55-7.65</td><td>7.62 mm</td><td class="text-center text-green-600">OK</td></tr>
+            <tr><td class="py-4">Trở kháng pin</td><td>15.0 MΩ</td><td>12-18</td><td>19.2 MΩ</td><td class="text-center text-red-600">NG</td></tr>
         `;
+    }
+
+    // Kanban NCR
+    function renderKanban() {
+        document.getElementById('kanban').innerHTML = `
+            <div class="bg-white rounded-3xl p-6"><h4 class="font-medium mb-4">Mới nhận (New) <span class="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded">1</span></h4><div class="bg-red-50 p-4 rounded-2xl">Lỗi hiển thị Panel màn hình S24</div></div>
+            <div class="bg-white rounded-3xl p-6"><h4 class="font-medium mb-4">Điều tra (Investigation) <span class="text-xs bg-orange-100 text-orange-600 px-2 py-0.5 rounded">1</span></h4><div class="bg-orange-50 p-4 rounded-2xl">Trầy xước vỏ nhôm dòng Buds Pro</div></div>
+            <div class="bg-white rounded-3xl p-6"><h4 class="font-medium mb-4">Lập kế hoạch (Plan) <span class="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded">1</span></h4><div class="bg-blue-50 p-4 rounded-2xl">Lỗi kết nối Bluetooth mẫu thử</div></div>
+            <div class="bg-white rounded-3xl p-6"><h4 class="font-medium mb-4">Xác minh (Verification) <span class="text-xs bg-purple-100 text-purple-600 px-2 py-0.5 rounded">1</span></h4><div class="bg-purple-50 p-4 rounded-2xl">Hỏng cắm pin tiệm cận lô 405</div></div>
+        `;
+    }
+
+    // Records Table
+    function renderRecordsTable() {
+        document.getElementById('records-table-container').innerHTML = `
+            <table class="w-full text-sm"><thead class="bg-gray-100"><tr><th class="py-5 px-8 text-left">Mã hồ sơ</th><th class="py-5 px-8 text-left">Thời gian</th><th class="py-5 px-8 text-left">Cổng đoạn</th><th class="py-5 px-8 text-left">Model / Lô</th><th class="py-5 px-8 text-center">Kết quả</th></tr></thead>
+            <tbody class="divide-y">
+                <tr><td class="px-8 py-5">INS-2024-001</td><td class="px-8 py-5">2024-05-20 08:30</td><td class="px-8 py-5">IQC</td><td class="px-8 py-5">SM-G998B</td><td class="px-8 py-5 text-center text-green-600">Pass</td></tr>
+                <tr><td class="px-8 py-5">INS-2024-002</td><td class="px-8 py-5">2024-05-20 09:15</td><td class="px-8 py-5">PQC</td><td class="px-8 py-5">SM-A525F</td><td class="px-8 py-5 text-center text-red-600">Fail</td></tr>
+            </tbody></table>`;
+    }
+
+    // Device List
+    function renderDevices() {
+        document.getElementById('device-list').innerHTML = `
+            <div class="bg-white rounded-3xl p-6">Thước kẹp Mitutoyo 500 <span class="text-green-600">Đang kết nối</span></div>
+            <div class="bg-white rounded-3xl p-6">Cảm biến nhiệt độ IoT <span class="text-green-600">Đang kết nối</span></div>
+            <div class="bg-white rounded-3xl p-6">Hệ thống AOI Camera <span class="text-green-600">Đang kết nối</span></div>
+        `;
+    }
+
+    function createNCR() {
+        alert("✅ NCR đã được tạo thành công!");
+    }
+
+    function runAI() {
+        alert("🧠 AI đã phân tích xong!\n\nPhát hiện bất thường tại Line B1.\nĐề xuất kiểm tra ngay.");
     }
 
     // Khởi chạy
     window.onload = () => {
         createYieldChart();
         renderQCTable();
-        console.log('%c✅ Samsung QMS Professional đã sẵn sàng!', 'color:#0a66c2; font-size:18px; font-weight:bold');
+        renderKanban();
+        renderRecordsTable();
+        renderDevices();
+        console.log('%c✅ Samsung QMS - Phiên bản CHI TIẾT đã sẵn sàng!', 'color:#0a66c2; font-size:18px; font-weight:bold');
     };
 </script>
 </body>
