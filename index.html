@@ -3,19 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Samsung QMS - Dashboard</title>
+  <title>Samsung QMS - QC Inspection</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
   <style>
-    .line-chart {
-      height: 280px;
-      background: linear-gradient(to top, #f0f9ff 0%, transparent 100%);
+    .lot-card {
+      transition: all 0.2s;
+    }
+    .lot-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    }
+    .selected {
+      border: 2px solid #3b82f6;
+      background-color: #eff6ff;
+    }
+    table td, table th {
+      padding: 14px 16px;
     }
   </style>
 </head>
 <body class="bg-gray-50 font-sans">
 
-<div class="flex h-screen">
+<div class="flex h-screen overflow-hidden">
 
   <!-- Sidebar -->
   <div class="w-64 bg-white border-r border-gray-200 flex flex-col">
@@ -25,11 +35,11 @@
     </div>
     
     <nav class="flex-1 p-3">
-      <a href="#" class="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-xl mb-1">
+      <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-xl">
         <i class="fas fa-th-large"></i>
-        <span class="font-medium">Dashboard</span>
+        <span>Dashboard</span>
       </a>
-      <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-xl">
+      <a href="#" class="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-xl mb-1">
         <i class="fas fa-clipboard-check"></i>
         <span>QC Inspection</span>
       </a>
@@ -46,15 +56,30 @@
         <span>Device & AI</span>
       </a>
     </nav>
+
+    <div class="p-4 border-t text-xs text-gray-500">
+      <div class="flex items-center gap-2 mb-2">
+        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+        System Online
+      </div>
+      <p>Version 2.4.1 • 20/05/2024</p>
+    </div>
   </div>
 
   <!-- Main Content -->
-  <div class="flex-1 overflow-auto">
+  <div class="flex-1 flex flex-col overflow-hidden">
     <!-- Header -->
     <header class="bg-white border-b px-6 py-4 flex items-center justify-between">
-      <div class="flex-1 max-w-xl">
+      <div class="flex items-center gap-4">
+        <h1 class="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+          <i class="fas fa-clipboard-check text-blue-600"></i>
+          QC Inspection
+        </h1>
+      </div>
+
+      <div class="flex-1 max-w-md mx-8">
         <div class="relative">
-          <input type="text" placeholder="Search records, NCRs, or devices..." 
+          <input id="search-input" type="text" placeholder="Tìm mã Batch, sản phẩm..." 
                  class="w-full bg-gray-100 border border-gray-300 rounded-2xl py-3 px-5 pl-12 focus:outline-none focus:border-blue-500">
           <i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i>
         </div>
@@ -72,185 +97,326 @@
       </div>
     </header>
 
-    <div class="p-8">
-
-      <!-- Title -->
-      <div class="flex justify-between items-start mb-8">
-        <div>
-          <h1 class="text-3xl font-bold text-gray-800">Tổng quan Chất Lượng</h1>
-          <p class="text-gray-600 mt-1">Giám sát hiệu suất vận hành thời gian thực trên toàn hệ thống.</p>
-        </div>
-        <div class="flex gap-3">
-          <button class="flex items-center gap-2 border border-gray-300 px-5 py-2.5 rounded-2xl hover:bg-gray-50">
-            <i class="fas fa-download"></i>
-            <span>Xuất báo cáo</span>
-          </button>
-          <button class="flex items-center gap-2 bg-blue-600 text-white px-6 py-2.5 rounded-2xl hover:bg-blue-700">
-            <i class="fas fa-plus"></i>
-            <span>Bắt đầu QC mới</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- KPI Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <!-- Card 1 -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
-          <div class="flex justify-between items-start">
-            <div class="text-green-500 text-3xl">📈</div>
-            <span class="text-green-600 text-sm font-medium">↑ +1.2%</span>
-          </div>
-          <h3 class="text-gray-600 mt-6">Tỷ lệ Yield (FPY)</h3>
-          <p class="text-4xl font-bold text-gray-800 mt-1">98.42%</p>
-          <p class="text-xs text-gray-500 mt-2">Tăng so với ca làm việc trước</p>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
-          <div class="flex justify-between items-start">
-            <div class="text-orange-500 text-3xl">⚠️</div>
-            <span class="bg-red-100 text-red-600 text-xs px-3 py-1 rounded-full">↓ -3</span>
-          </div>
-          <h3 class="text-gray-600 mt-6">NCR Đang xử lý</h3>
-          <p class="text-4xl font-bold text-gray-800 mt-1">12</p>
-          <p class="text-xs text-gray-500 mt-2">Đã giải quyết 5 lỗi nghiêm trọng</p>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
-          <div class="flex justify-between items-start">
-            <div class="text-blue-500 text-3xl">✅</div>
-            <span class="text-blue-600 text-sm font-medium">↑ +5%</span>
-          </div>
-          <h3 class="text-gray-600 mt-6">Tiến độ CAPA</h3>
-          <p class="text-4xl font-bold text-gray-800 mt-1">85%</p>
-          <p class="text-xs text-gray-500 mt-2">Vượt chỉ tiêu hoàn thành tuần</p>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
-          <div class="flex justify-between items-start">
-            <div class="text-purple-500 text-3xl">⚡</div>
-            <span class="text-purple-600 text-sm font-medium">↑ +2</span>
-          </div>
-          <h3 class="text-gray-600 mt-6">Dự báo Chất lượng</h3>
-          <p class="text-4xl font-bold text-gray-800 mt-1">94/100</p>
-          <p class="text-xs text-gray-500 mt-2">Độ ổn định hệ thống rất cao</p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Chart Section -->
-        <div class="lg:col-span-2 bg-white rounded-3xl p-6 shadow-sm">
-          <div class="flex justify-between mb-4">
-            <div>
-              <h2 class="text-xl font-semibold">Xu hướng chất lượng thời gian thực</h2>
-              <p class="text-sm text-gray-500">Dữ liệu cập nhật mỗi 5 phút từ các dây chuyền lắp ráp.</p>
-            </div>
-            <div class="bg-green-100 text-green-700 text-xs px-4 py-2 rounded-2xl flex items-center gap-1">
-              <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              Live
-            </div>
+    <div class="flex flex-1 overflow-hidden">
+      
+      <!-- LEFT PANEL: Lô hàng Active -->
+      <div class="w-96 border-r bg-white flex flex-col">
+        <div class="px-6 py-5 border-b">
+          <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-lg flex items-center gap-2">
+              <span class="text-blue-600">📦</span>
+              Lô hàng Active
+            </h2>
+            <span class="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-3xl">4 lô đang kiểm tra</span>
           </div>
           
-          <div class="line-chart rounded-2xl relative overflow-hidden border border-gray-100">
-            <!-- Fake line chart -->
-            <svg width="100%" height="100%" viewBox="0 0 800 280" fill="none" xmlns="http://www.w3.org/2000/svg" class="absolute bottom-0">
-              <path d="M50 180 Q150 170 250 185 Q350 140 450 195 Q550 210 650 120 Q750 110 780 125" 
-                    stroke="#3b82f6" stroke-width="6" stroke-linecap="round" fill="none"/>
-              <path d="M50 180 Q150 170 250 185 Q350 140 450 195 Q550 210 650 120 Q750 110 780 125" 
-                    stroke="#bfdbfe" stroke-width="20" stroke-linecap="round" fill="none" opacity="0.4"/>
-            </svg>
+          <div class="flex gap-2 mt-4">
+            <button onclick="filterLots('all')" class="flex-1 py-2 text-sm font-medium rounded-2xl border border-gray-300 hover:border-gray-400 active">Tất cả</button>
+            <button onclick="filterLots('iqc')" class="flex-1 py-2 text-sm font-medium rounded-2xl border border-gray-300 hover:border-gray-400">IQC</button>
+            <button onclick="filterLots('pqc')" class="flex-1 py-2 text-sm font-medium rounded-2xl border border-gray-300 hover:border-gray-400">PQC</button>
           </div>
         </div>
 
-        <!-- AI Alerts -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm">
-          <h2 class="text-xl font-semibold mb-4">Phân tích AI & Bất thường</h2>
-          <p class="text-sm text-gray-500 mb-5">Cảnh báo được AI phát hiện trong 2 giờ qua.</p>
-
-          <div class="space-y-4">
-            <div class="border border-red-200 bg-red-50 rounded-2xl p-4">
-              <div class="flex justify-between">
-                <span class="font-medium text-red-600">LINE B1</span>
-                <span class="text-xs text-gray-500">14:45</span>
+        <!-- Lot List -->
+        <div class="flex-1 overflow-auto p-4 space-y-3" id="lot-list">
+          <!-- Lot 1 - Selected -->
+          <div onclick="selectLot(1)" class="lot-card selected p-4 rounded-3xl border cursor-pointer" id="lot-1">
+            <div class="flex justify-between">
+              <div>
+                <span class="inline-block bg-blue-100 text-blue-700 text-xs px-3 py-1 rounded-2xl">IQC</span>
+                <p class="font-semibold mt-2">Galaxy S24 Frame</p>
+                <p class="text-sm text-gray-500">B-20240520-01</p>
               </div>
-              <p class="mt-1">Nhiệt độ lò hàn vượt ngưỡng (265°C)</p>
-              <span class="inline-block mt-2 bg-red-600 text-white text-xs px-3 py-1 rounded-full">Khẩn cấp</span>
-            </div>
-
-            <div class="border border-yellow-200 bg-yellow-50 rounded-2xl p-4">
-              <div class="flex justify-between">
-                <span class="font-medium text-yellow-600">LINE B2</span>
-                <span class="text-xs text-gray-500">14:30</span>
+              <div class="text-right">
+                <p class="text-xs text-gray-500">08:30</p>
+                <span class="inline-flex items-center gap-1 text-red-500 text-sm mt-4">
+                  <i class="fas fa-circle text-xs"></i> High
+                </span>
               </div>
-              <p class="mt-1">Tỷ lệ lỗi ngoại quan tăng 5%</p>
-              <span class="inline-block mt-2 bg-yellow-500 text-white text-xs px-3 py-1 rounded-full">Cảnh báo</span>
-            </div>
-
-            <div class="border border-gray-200 bg-gray-50 rounded-2xl p-4">
-              <div class="flex justify-between">
-                <span class="font-medium">LINE A1</span>
-                <span class="text-xs text-gray-500">14:15</span>
-              </div>
-              <p class="mt-1">Thiết bị đo áp suất mất kết nối</p>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- Bottom Section -->
-      <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Defect Distribution -->
-        <div class="bg-white rounded-3xl p-6">
-          <h2 class="font-semibold mb-6">Phân bố lỗi theo Dây chuyền</h2>
-          <div class="space-y-6">
-            <div>
-              <div class="flex justify-between text-sm mb-2">
-                <span>Line B1</span>
-                <span class="font-medium">87</span>
+          <!-- Lot 2 -->
+          <div onclick="selectLot(2)" class="lot-card p-4 rounded-3xl border cursor-pointer" id="lot-2">
+            <div class="flex justify-between">
+              <div>
+                <span class="inline-block bg-amber-100 text-amber-700 text-xs px-3 py-1 rounded-2xl">PQC</span>
+                <p class="font-semibold mt-2">AMOLED Display Module</p>
+                <p class="text-sm text-gray-500">B-20240520-04</p>
               </div>
-              <div class="h-8 bg-green-400 rounded-2xl w-[95%]"></div>
-            </div>
-            <div>
-              <div class="flex justify-between text-sm mb-2">
-                <span>Line B2</span>
-                <span class="font-medium">62</span>
+              <div class="text-right">
+                <p class="text-xs text-gray-500">09:15</p>
+                <span class="text-emerald-500 text-sm mt-4">Normal</span>
               </div>
-              <div class="h-8 bg-green-400 rounded-2xl w-[70%]"></div>
-            </div>
-            <div>
-              <div class="flex justify-between text-sm mb-2">
-                <span>Line A1</span>
-                <span class="font-medium">45</span>
-              </div>
-              <div class="h-8 bg-green-400 rounded-2xl w-[52%]"></div>
             </div>
           </div>
-        </div>
 
-        <!-- Quick Actions -->
-        <div class="bg-white rounded-3xl p-6">
-          <h2 class="font-semibold mb-6">Thao tác nhanh</h2>
-          <div class="grid grid-cols-2 gap-4">
-            <button class="border border-gray-300 hover:border-gray-400 p-5 rounded-2xl text-left transition">
-              <i class="fas fa-file-alt text-2xl mb-3 text-blue-600"></i>
-              <p class="font-medium">Hồ sơ Kiểm tra</p>
-              <p class="text-xs text-gray-500">Tra cứu lịch sử kiểm tra IQC/PQC/OQC</p>
-            </button>
-            <button class="border border-gray-300 hover:border-gray-400 p-5 rounded-2xl text-left transition">
-              <i class="fas fa-exclamation-triangle text-2xl mb-3 text-orange-500"></i>
-              <p class="font-medium">Báo cáo NCR</p>
-              <p class="text-xs text-gray-500">Tạo báo cáo sản phẩm không phù hợp mới</p>
-            </button>
-            <!-- Thêm các nút khác tương tự nếu cần -->
+          <!-- Lot 3 -->
+          <div onclick="selectLot(3)" class="lot-card p-4 rounded-3xl border cursor-pointer" id="lot-3">
+            <div class="flex justify-between">
+              <div>
+                <span class="inline-block bg-blue-100 text-blue-700 text-xs px-3 py-1 rounded-2xl">IQC</span>
+                <p class="font-semibold mt-2">Snapdragon 8 Gen 3</p>
+                <p class="text-sm text-gray-500">B-20240520-02</p>
+              </div>
+              <div class="text-right">
+                <p class="text-xs text-gray-500">09:45</p>
+                <span class="inline-flex items-center gap-1 text-red-500 text-sm mt-4">
+                  <i class="fas fa-circle text-xs"></i> High
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lot 4 -->
+          <div onclick="selectLot(4)" class="lot-card p-4 rounded-3xl border cursor-pointer" id="lot-4">
+            <div class="flex justify-between">
+              <div>
+                <span class="inline-block bg-purple-100 text-purple-700 text-xs px-3 py-1 rounded-2xl">OQC</span>
+                <p class="font-semibold mt-2">Galaxy Buds 3 Case</p>
+                <p class="text-sm text-gray-500">B-20240520-09</p>
+              </div>
+              <div class="text-right">
+                <p class="text-xs text-gray-500">10:20</p>
+                <span class="text-emerald-500 text-sm mt-4">Low</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
+      <!-- RIGHT PANEL: Chi tiết kiểm tra -->
+      <div class="flex-1 overflow-auto p-8 bg-gray-50">
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <h2 class="text-3xl font-bold">CHI TIẾT KIỂM TRA</h2>
+            <div class="flex items-center gap-3 mt-1">
+              <span class="font-mono text-lg font-semibold text-blue-600">B-20240520-01</span>
+              <span class="bg-white text-gray-700 text-sm px-4 py-1 rounded-3xl border">Galaxy S24 Frame</span>
+              <span class="flex items-center gap-1 text-green-600"><i class="fas fa-circle-check"></i> Smart Tool Connected</span>
+            </div>
+          </div>
+          <button onclick="scanQR()" class="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-3xl hover:bg-blue-700">
+            <i class="fas fa-qrcode"></i>
+            <span>Quét Mã</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-12 gap-6">
+          
+          <!-- Thông tin lệnh kiểm tra -->
+          <div class="col-span-12 lg:col-span-7 bg-white rounded-3xl p-6">
+            <h3 class="font-semibold mb-4 flex items-center gap-2"><i class="fas fa-info-circle text-blue-500"></i> Thông tin lệnh kiểm tra</h3>
+            <div class="grid grid-cols-3 gap-6 text-sm">
+              <div>
+                <p class="text-gray-500">LOẠI QC</p>
+                <p class="font-semibold">IQC - Inspection</p>
+              </div>
+              <div>
+                <p class="text-gray-500">NGƯỜI PHỤ TRÁCH</p>
+                <p class="font-semibold">Nguyễn Văn An (ID: QC-290)</p>
+              </div>
+              <div>
+                <p class="text-gray-500">THỜI GIAN BẮT ĐẦU</p>
+                <p class="font-semibold">20/05/2024 - 14:20:05</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lịch sử lô hàng -->
+          <div class="col-span-12 lg:col-span-5 bg-white rounded-3xl p-6">
+            <h3 class="font-semibold mb-4 flex items-center gap-2"><i class="fas fa-history text-blue-500"></i> Lịch sử Lô hàng</h3>
+            <div class="space-y-3 text-sm">
+              <div class="flex justify-between"><span class="text-gray-500">Lần kiểm tra trước:</span><span class="font-medium">PASS (v1.0)</span></div>
+              <div class="flex justify-between"><span class="text-gray-500">Vendor Rating:</span><span class="font-medium">B+</span></div>
+              <div class="flex justify-between"><span class="text-gray-500">Tổng số mẫu:</span><span class="font-medium">5 mẫu ngẫu nhiên</span></div>
+            </div>
+          </div>
+
+          <!-- Dữ liệu đo lường kỹ thuật -->
+          <div class="col-span-12 bg-white rounded-3xl p-6">
+            <div class="flex justify-between mb-4">
+              <h3 class="font-semibold">Dữ liệu đo lường kỹ thuật</h3>
+              <button class="text-blue-600 text-sm flex items-center gap-1 hover:underline">
+                <i class="fas fa-download"></i> Tải mẫu Excel
+              </button>
+            </div>
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b text-gray-500">
+                  <th class="text-left">#</th>
+                  <th class="text-left">CHỈ TIÊU KIỂM TRA</th>
+                  <th class="text-left">TIÊU CHUẨN (NOMINAL)</th>
+                  <th class="text-left">LCL - UCL</th>
+                  <th class="text-center">ĐƠN VỊ</th>
+                  <th class="text-right">GIÁ TRỊ THỰC TẾ</th>
+                  <th class="text-center">TRẠNG THÁI</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y">
+                <tr>
+                  <td>1</td>
+                  <td>Độ dày khung viền</td>
+                  <td>7.60</td>
+                  <td>7.55-7.65</td>
+                  <td class="text-center">MM</td>
+                  <td class="text-right font-medium">7.62</td>
+                  <td class="text-center"><span class="text-emerald-600 font-medium">OK</span></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Độ phẳng bề mặt</td>
+                  <td>0.05</td>
+                  <td>0-0.08</td>
+                  <td class="text-center">MM</td>
+                  <td class="text-right font-medium">0.04</td>
+                  <td class="text-center"><span class="text-emerald-600 font-medium">OK</span></td>
+                </tr>
+                <tr class="bg-red-50">
+                  <td>3</td>
+                  <td>Trở kháng pin</td>
+                  <td>15.0</td>
+                  <td>12-18</td>
+                  <td class="text-center">MΩ</td>
+                  <td class="text-right font-medium text-red-600">19.2</td>
+                  <td class="text-center"><span class="px-4 py-1 bg-red-100 text-red-600 text-xs rounded-3xl">NG</span></td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>Dòng rò rỉ</td>
+                  <td>0.10</td>
+                  <td>0-0.15</td>
+                  <td class="text-center">MA</td>
+                  <td class="text-right font-medium">0.08</td>
+                  <td class="text-center"><span class="text-emerald-600 font-medium">OK</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Kiểm tra ngoại quan + Ghi chú -->
+          <div class="col-span-12 lg:col-span-7 bg-white rounded-3xl p-6">
+            <h3 class="font-semibold mb-4 flex items-center gap-2"><i class="fas fa-eye text-blue-500"></i> Kiểm tra ngoại quan (Visual Check)</h3>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="border rounded-2xl p-4 flex justify-between items-center">
+                <div>
+                  <p class="font-medium">Tình trạng bề mặt</p>
+                  <p class="text-xs text-gray-500">Không trầy xước, không bọt khí, bề mặt mịn.</p>
+                </div>
+                <input type="checkbox" checked class="w-6 h-6 accent-blue-600">
+              </div>
+              <div class="border rounded-2xl p-4 flex justify-between items-center">
+                <div>
+                  <p class="font-medium">Độ phủ lớp mạ (Coating)</p>
+                  <p class="text-xs text-gray-500">Phủ đều, không bong tróc góc cạnh.</p>
+                </div>
+                <input type="checkbox" checked class="w-6 h-6 accent-blue-600">
+              </div>
+              <div class="border rounded-2xl p-4 flex justify-between items-center">
+                <div>
+                  <p class="font-medium">Nhãn mác & Logo</p>
+                  <p class="text-xs text-gray-500">Logo in sắc nét, đúng vị trí bản vẽ.</p>
+                </div>
+                <input type="checkbox" class="w-6 h-6 accent-blue-600">
+              </div>
+              <div class="border rounded-2xl p-4 flex justify-between items-center">
+                <div>
+                  <p class="font-medium">Quy cách đóng gói</p>
+                  <p class="text-xs text-gray-500">Túi chống tĩnh điện, thùng carton chuẩn.</p>
+                </div>
+                <input type="checkbox" checked class="w-6 h-6 accent-blue-600">
+              </div>
+            </div>
+          </div>
+
+          <!-- Cảnh báo bất thường -->
+          <div class="col-span-12 lg:col-span-5 bg-white rounded-3xl p-6 flex flex-col">
+            <h3 class="font-semibold mb-4 flex items-center gap-2 text-orange-600"><i class="fas fa-triangle-exclamation"></i> Ghi chú & Cảnh báo bất thường</h3>
+            <div class="flex-1 border border-orange-200 bg-orange-50 rounded-2xl p-5 flex flex-col justify-center items-center text-center">
+              <i class="fas fa-exclamation-triangle text-4xl text-orange-500 mb-3"></i>
+              <p class="font-medium text-orange-700">Phát hiện <span class="font-bold">1 chỉ số</span> (Trở kháng pin) vượt ngưỡng UCL.</p>
+              <p class="text-sm text-orange-600 mt-1">Hệ thống đề xuất kiểm tra lại thiết bị đo.</p>
+            </div>
+            <textarea class="mt-4 w-full h-28 border rounded-2xl p-4 text-sm" placeholder="Nhập ghi chú thêm nếu có..."></textarea>
+          </div>
+        </div>
+
+        <!-- Bottom Action Bar -->
+        <div class="mt-8 flex items-center justify-between bg-white border rounded-3xl p-4 shadow-sm">
+          <div onclick="markFail()" class="flex items-center gap-3 cursor-pointer">
+            <div class="w-12 h-12 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center text-3xl">✕</div>
+            <div>
+              <p class="font-bold text-red-600 text-xl">KHÔNG ĐẠT</p>
+              <p class="text-xs text-red-500">(FAIL)</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <button onclick="resetForm()" class="flex items-center gap-2 border border-gray-300 px-8 py-4 rounded-3xl hover:bg-gray-50">
+              <i class="fas fa-undo"></i>
+              <span>Hủy / Reset</span>
+            </button>
+            
+            <button onclick="createNCR()" class="flex items-center gap-2 bg-red-600 text-white px-8 py-4 rounded-3xl hover:bg-red-700">
+              <i class="fas fa-exclamation-triangle"></i>
+              <span>Tạo NCR</span>
+            </button>
+
+            <button onclick="submitQC()" class="flex items-center gap-2 bg-blue-600 text-white px-10 py-4 rounded-3xl hover:bg-blue-700 text-lg font-medium">
+              <i class="fas fa-paper-plane"></i>
+              <span>Gửi Báo Cáo QC</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
+<script>
+  function selectLot(id) {
+    document.querySelectorAll('.lot-card').forEach(el => el.classList.remove('selected'));
+    document.getElementById('lot-' + id).classList.add('selected');
+    
+    // Demo: alert cho thấy đã chọn (có thể mở rộng sau)
+    console.log('Đã chọn lô số ' + id);
+  }
+
+  function filterLots(type) {
+    // Có thể thêm logic lọc thực tế nếu cần
+    alert('Đã lọc theo: ' + type.toUpperCase());
+  }
+
+  function scanQR() {
+    alert('📱 Quét mã QR thành công!\nBatch: B-20240520-01');
+  }
+
+  function markFail() {
+    if (confirm('Xác nhận KHÔNG ĐẠT toàn bộ lô này?')) {
+      alert('✅ Đã đánh dấu KHÔNG ĐẠT và tự động tạo NCR');
+    }
+  }
+
+  function resetForm() {
+    if (confirm('Reset toàn bộ dữ liệu kiểm tra?')) {
+      location.reload();
+    }
+  }
+
+  function createNCR() {
+    alert('🚀 Đã chuyển sang form tạo NCR mới');
+    // Có thể redirect sang trang NCR nếu có
+  }
+
+  function submitQC() {
+    alert('📤 Báo cáo QC đã được gửi thành công!\nLô hàng B-20240520-01 → PASS với 1 cảnh báo');
+  }
+
+  // Tailwind script
+  tailwind.config = {
+    content: ["./**/*.{html,js}"],
+    theme: { extend: {} }
+  };
+</script>
 </body>
 </html>
