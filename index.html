@@ -3,14 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Samsung QMS - Full System</title>
+  <title>Samsung QMS - Hệ thống Quản lý Chất lượng</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
   <style>
     .page { display: none; }
     .page.active { display: block; }
-    .sidebar-link { transition: all 0.2s; }
-    .sidebar-link.active { background-color: #3b82f6; color: white; }
+    .nav-link { transition: all 0.2s; }
+    .nav-link.active { background-color: #2563eb; color: white; font-weight: 600; }
+    .kpi-card { transition: transform 0.2s; }
+    .kpi-card:hover { transform: translateY(-4px); }
   </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -18,102 +20,188 @@
 <div class="flex h-screen overflow-hidden">
 
   <!-- Sidebar -->
-  <div class="w-64 bg-white border-r flex flex-col">
-    <div class="p-4 border-b flex items-center gap-2">
-      <div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white font-bold text-xl">S</div>
-      <span class="text-2xl font-semibold text-blue-600">Samsung QMS</span>
+  <div class="w-72 bg-white border-r flex flex-col">
+    <div class="p-6 border-b flex items-center gap-3">
+      <div class="w-10 h-10 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold">S</div>
+      <div>
+        <span class="text-3xl font-semibold text-blue-600">Samsung</span>
+        <span class="text-3xl font-semibold text-gray-800">QMS</span>
+      </div>
     </div>
-    
-    <nav class="flex-1 p-3 space-y-1">
-      <a onclick="showPage('dashboard')" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer active" id="nav-dashboard">
-        <i class="fas fa-th-large"></i> Dashboard
+
+    <nav class="flex-1 p-4 space-y-1">
+      <a onclick="showPage('dashboard')" class="nav-link flex items-center gap-3 px-5 py-4 rounded-2xl cursor-pointer active" id="nav-dashboard">
+        <i class="fas fa-th-large w-5"></i> Dashboard
       </a>
-      <a onclick="showPage('qc')" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer" id="nav-qc">
-        <i class="fas fa-clipboard-check"></i> QC Inspection
+      <a onclick="showPage('qc')" class="nav-link flex items-center gap-3 px-5 py-4 rounded-2xl cursor-pointer" id="nav-qc">
+        <i class="fas fa-clipboard-check w-5"></i> QC Inspection
       </a>
-      <a onclick="showPage('ncr')" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer" id="nav-ncr">
-        <i class="fas fa-exclamation-triangle"></i> NCR / CAPA
+      <a onclick="showPage('ncr')" class="nav-link flex items-center gap-3 px-5 py-4 rounded-2xl cursor-pointer" id="nav-ncr">
+        <i class="fas fa-exclamation-triangle w-5"></i> NCR / CAPA
       </a>
-      <a onclick="showPage('records')" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer" id="nav-records">
-        <i class="fas fa-archive"></i> Records Archive
+      <a onclick="showPage('records')" class="nav-link flex items-center gap-3 px-5 py-4 rounded-2xl cursor-pointer" id="nav-records">
+        <i class="fas fa-archive w-5"></i> Records Archive
       </a>
-      <a onclick="showPage('device')" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer" id="nav-device">
-        <i class="fas fa-cogs"></i> Device & AI
+      <a onclick="showPage('device')" class="nav-link flex items-center gap-3 px-5 py-4 rounded-2xl cursor-pointer" id="nav-device">
+        <i class="fas fa-cogs w-5"></i> Device & AI
       </a>
     </nav>
+
+    <div class="p-6 border-t text-xs text-gray-500">
+      <div class="flex items-center gap-2 mb-2">
+        <div class="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></div>
+        Hệ thống đang hoạt động
+      </div>
+      <p>Phiên bản 2.5.1 • 20/04/2026</p>
+    </div>
   </div>
 
-  <!-- Main Area -->
+  <!-- Main Content -->
   <div class="flex-1 flex flex-col overflow-hidden">
 
-    <!-- Top Header -->
-    <header class="bg-white border-b px-6 py-4 flex items-center justify-between">
-      <div class="flex-1 max-w-xl">
-        <input type="text" id="global-search" placeholder="Search records, NCRs, or devices..." 
-               class="w-full bg-gray-100 border border-gray-300 rounded-2xl py-3 px-5 pl-12 focus:outline-none focus:border-blue-500">
-      </div>
+    <!-- Header -->
+    <header class="bg-white border-b px-8 py-5 flex items-center justify-between">
+      <input type="text" placeholder="Tìm kiếm hồ sơ, NCR, thiết bị..." 
+             class="w-96 bg-gray-100 border border-gray-300 rounded-3xl py-3 px-6 focus:outline-none focus:border-blue-500">
+      
       <div class="flex items-center gap-6">
-        <button class="text-gray-500 hover:text-gray-700"><i class="fas fa-bell text-xl"></i></button>
+        <button class="relative text-gray-600 hover:text-gray-800">
+          <i class="fas fa-bell text-2xl"></i>
+          <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">3</span>
+        </button>
         <div class="flex items-center gap-3">
           <div class="text-right">
-            <p class="font-medium">Admin User</p>
+            <p class="font-semibold">Admin User</p>
             <p class="text-sm text-gray-500">Quality Assurance</p>
           </div>
-          <img src="https://i.pravatar.cc/40" alt="Admin" class="w-10 h-10 rounded-full border-2 border-white shadow">
+          <img src="https://i.pravatar.cc/48" alt="User" class="w-11 h-11 rounded-2xl ring-2 ring-white shadow">
         </div>
       </div>
     </header>
 
-    <!-- Page Contents -->
+    <!-- Pages -->
 
     <!-- 1. DASHBOARD -->
     <div id="dashboard" class="page active flex-1 overflow-auto p-8">
-      <h1 class="text-3xl font-bold">Tổng quan Chất Lượng</h1>
-      <p class="text-gray-600">Giám sát hiệu suất vận hành thời gian thực trên toàn hệ thống.</p>
-      <!-- KPI Cards + Chart + AI Alerts (giống code đầu tiên tôi đưa) -->
-      <div class="grid grid-cols-4 gap-6 mt-8">
-        <div class="bg-white rounded-3xl p-6"><div class="text-green-500 text-3xl">📈</div><h3 class="text-gray-600 mt-6">Tỷ lệ Yield (FPY)</h3><p class="text-4xl font-bold">98.42%</p></div>
-        <div class="bg-white rounded-3xl p-6"><div class="text-orange-500 text-3xl">⚠️</div><h3 class="text-gray-600 mt-6">NCR Đang xử lý</h3><p class="text-4xl font-bold">12</p></div>
-        <div class="bg-white rounded-3xl p-6"><div class="text-blue-500 text-3xl">✅</div><h3 class="text-gray-600 mt-6">Tiến độ CAPA</h3><p class="text-4xl font-bold">85%</p></div>
-        <div class="bg-white rounded-3xl p-6"><div class="text-purple-500 text-3xl">⚡</div><h3 class="text-gray-600 mt-6">Dự báo Chất lượng</h3><p class="text-4xl font-bold">94/100</p></div>
+      <h1 class="text-4xl font-bold text-gray-800">Tổng quan Chất Lượng</h1>
+      <p class="text-gray-600 mt-1">Giám sát hiệu suất vận hành thời gian thực trên toàn hệ thống</p>
+
+      <!-- KPI -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+        <div class="kpi-card bg-white rounded-3xl p-7 shadow-sm">
+          <div class="flex justify-between">
+            <div class="text-4xl">📈</div>
+            <span class="text-green-600 text-sm font-medium">↑ 1.2%</span>
+          </div>
+          <p class="text-gray-600 mt-8 text-lg">Tỷ lệ Yield (FPY)</p>
+          <p class="text-5xl font-bold text-gray-800 mt-1">98.42%</p>
+        </div>
+        <div class="kpi-card bg-white rounded-3xl p-7 shadow-sm">
+          <div class="flex justify-between">
+            <div class="text-4xl">⚠️</div>
+            <span class="text-red-500 text-sm font-medium">-3</span>
+          </div>
+          <p class="text-gray-600 mt-8 text-lg">NCR Đang xử lý</p>
+          <p class="text-5xl font-bold text-gray-800 mt-1">12</p>
+        </div>
+        <div class="kpi-card bg-white rounded-3xl p-7 shadow-sm">
+          <div class="flex justify-between">
+            <div class="text-4xl">✅</div>
+            <span class="text-blue-600 text-sm font-medium">↑ 5%</span>
+          </div>
+          <p class="text-gray-600 mt-8 text-lg">Tiến độ CAPA</p>
+          <p class="text-5xl font-bold text-gray-800 mt-1">85%</p>
+        </div>
+        <div class="kpi-card bg-white rounded-3xl p-7 shadow-sm">
+          <div class="flex justify-between">
+            <div class="text-4xl">⚡</div>
+            <span class="text-purple-600 text-sm font-medium">↑ 2</span>
+          </div>
+          <p class="text-gray-600 mt-8 text-lg">Dự báo Chất lượng</p>
+          <p class="text-5xl font-bold text-gray-800 mt-1">94/100</p>
+        </div>
       </div>
-      <!-- Chart + Alerts (có thể mở rộng thêm nếu cần) -->
-      <p class="text-center text-gray-400 mt-12">📊 Biểu đồ xu hướng thời gian thực + Phân tích AI (giống ảnh gốc)</p>
+
+      <!-- Chart & AI Alerts -->
+      <div class="grid grid-cols-12 gap-6 mt-10">
+        <div class="col-span-12 lg:col-span-7 bg-white rounded-3xl p-6">
+          <h2 class="font-semibold mb-4">Xu hướng chất lượng thời gian thực</h2>
+          <div class="h-80 bg-gradient-to-b from-blue-50 to-white rounded-2xl flex items-center justify-center border border-dashed border-gray-300">
+            <p class="text-gray-400">📊 Biểu đồ Yield Rate theo thời gian (có thể tích hợp Chart.js)</p>
+          </div>
+        </div>
+
+        <div class="col-span-12 lg:col-span-5 bg-white rounded-3xl p-6">
+          <h2 class="font-semibold mb-4">Cảnh báo bất thường từ AI</h2>
+          <div class="space-y-4">
+            <div class="p-4 border border-red-200 bg-red-50 rounded-2xl">
+              <p class="font-medium text-red-700">LINE B1 - Nhiệt độ lò hàn vượt ngưỡng (265°C)</p>
+              <p class="text-xs text-red-600 mt-1">14:45 • Khẩn cấp</p>
+            </div>
+            <div class="p-4 border border-yellow-200 bg-yellow-50 rounded-2xl">
+              <p class="font-medium">LINE B2 - Tỷ lệ lỗi ngoại quan tăng 5%</p>
+              <p class="text-xs text-yellow-600 mt-1">14:30 • Cảnh báo</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="mt-10">
+        <h2 class="font-semibold mb-4">Thao tác nhanh</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <button onclick="showPage('records')" class="bg-white p-6 rounded-3xl text-left hover:shadow">
+            <i class="fas fa-file-alt text-3xl text-blue-600"></i>
+            <p class="font-medium mt-4">Hồ sơ Kiểm tra</p>
+          </button>
+          <button onclick="showPage('ncr')" class="bg-white p-6 rounded-3xl text-left hover:shadow">
+            <i class="fas fa-exclamation-triangle text-3xl text-orange-600"></i>
+            <p class="font-medium mt-4">Báo cáo NCR</p>
+          </button>
+          <button onclick="showPage('device')" class="bg-white p-6 rounded-3xl text-left hover:shadow">
+            <i class="fas fa-cogs text-3xl text-purple-600"></i>
+            <p class="font-medium mt-4">Quản lý Thiết bị</p>
+          </button>
+          <button class="bg-white p-6 rounded-3xl text-left hover:shadow">
+            <i class="fas fa-chart-line text-3xl text-teal-600"></i>
+            <p class="font-medium mt-4">Phân tích Hiệu suất</p>
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- 2. QC INSPECTION -->
     <div id="qc" class="page flex-1 overflow-auto p-8 bg-gray-50">
-      <!-- Nội dung QC Inspection đầy đủ từ lần trước -->
-      <div class="flex gap-6">
-        <!-- Left: Lô hàng Active -->
+      <h1 class="text-3xl font-bold">QC Inspection - Kiểm tra Chất lượng</h1>
+      <div class="flex gap-8 mt-8">
+        <!-- Danh sách lô hàng -->
         <div class="w-96 bg-white rounded-3xl p-6 shadow-sm">
-          <h2 class="font-semibold text-lg">Lô hàng Active</h2>
-          <!-- 4 lô hàng (có thể click) -->
-          <div onclick="selectLot(this)" class="mt-4 p-4 rounded-3xl border-2 border-blue-600 bg-blue-50 cursor-pointer">IQC - Galaxy S24 Frame (B-20240520-01) <span class="text-red-500">High</span></div>
-          <div onclick="selectLot(this)" class="mt-3 p-4 rounded-3xl border cursor-pointer">PQC - AMOLED Display Module (B-20240520-04)</div>
-          <div onclick="selectLot(this)" class="mt-3 p-4 rounded-3xl border cursor-pointer">IQC - Snapdragon 8 Gen 3 (B-20240520-02) <span class="text-red-500">High</span></div>
-          <div onclick="selectLot(this)" class="mt-3 p-4 rounded-3xl border cursor-pointer">OQC - Galaxy Buds 3 Case (B-20240520-09)</div>
+          <h2 class="font-semibold text-lg mb-4">Lô hàng Active</h2>
+          <div class="space-y-3">
+            <div class="p-4 border-2 border-blue-600 bg-blue-50 rounded-3xl cursor-pointer">IQC • Galaxy S24 Frame (B-20240520-01) <span class="text-red-500 text-sm">High</span></div>
+            <div class="p-4 border rounded-3xl cursor-pointer">PQC • AMOLED Display Module (B-20240520-04)</div>
+            <div class="p-4 border rounded-3xl cursor-pointer">IQC • Snapdragon 8 Gen 3 (B-20240520-02) <span class="text-red-500 text-sm">High</span></div>
+          </div>
         </div>
 
-        <!-- Right: Chi tiết -->
-        <div class="flex-1">
-          <h2 class="text-3xl font-bold mb-2">CHI TIẾT KIỂM TRA • B-20240520-01</h2>
-          <div class="grid grid-cols-12 gap-6">
-            <!-- Bảng dữ liệu đo lường + Visual Check + Cảnh báo + Action buttons -->
-            <div class="col-span-12 bg-white rounded-3xl p-6">
-              <table class="w-full text-sm">
-                <thead><tr class="text-gray-500"><th>#</th><th>Chỉ tiêu</th><th>Tiêu chuẩn</th><th>LCL-UCL</th><th>Đơn vị</th><th>Giá trị thực tế</th><th>Trạng thái</th></tr></thead>
-                <tbody class="divide-y">
-                  <tr><td>1</td><td>Độ dày khung viền</td><td>7.60</td><td>7.55-7.65</td><td>MM</td><td class="text-right">7.62</td><td class="text-emerald-600 text-center">OK</td></tr>
-                  <tr><td>3</td><td>Trở kháng pin</td><td>15.0</td><td>12-18</td><td>MΩ</td><td class="text-right text-red-600">19.2</td><td class="text-center"><span class="bg-red-100 text-red-600 px-4 py-1 rounded-3xl text-xs">NG</span></td></tr>
-                </tbody>
-              </table>
-            </div>
-            <!-- Visual Check + Ghi chú + Buttons -->
-            <div class="col-span-12 flex justify-end gap-4 mt-4">
-              <button onclick="markFail()" class="px-8 py-4 bg-red-600 text-white rounded-3xl">KHÔNG ĐẠT (FAIL)</button>
-              <button onclick="submitQC()" class="px-10 py-4 bg-blue-600 text-white rounded-3xl">Gửi Báo Cáo QC</button>
-            </div>
+        <!-- Chi tiết kiểm tra -->
+        <div class="flex-1 bg-white rounded-3xl p-8">
+          <h2 class="text-2xl font-semibold">B-20240520-01 • Galaxy S24 Frame</h2>
+          <div class="mt-8">
+            <h3 class="font-medium mb-3">Dữ liệu đo lường kỹ thuật</h3>
+            <table class="w-full text-sm">
+              <thead class="bg-gray-100"><tr><th class="py-3 px-4 text-left">Chỉ tiêu</th><th>Tiêu chuẩn</th><th>LCL - UCL</th><th>Giá trị thực tế</th><th>Trạng thái</th></tr></thead>
+              <tbody class="divide-y">
+                <tr><td class="py-4 px-4">Độ dày khung viền</td><td>7.60 mm</td><td>7.55-7.65</td><td class="font-medium">7.62</td><td class="text-emerald-600">OK</td></tr>
+                <tr><td class="py-4 px-4">Trở kháng pin</td><td>15.0 MΩ</td><td>12-18</td><td class="font-medium text-red-600">19.2</td><td class="text-red-600">NG</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mt-10 flex gap-4">
+            <button onclick="createNCR()" class="flex-1 py-4 bg-red-600 text-white rounded-3xl font-medium">Tạo NCR</button>
+            <button onclick="submitQCReport()" class="flex-1 py-4 bg-blue-600 text-white rounded-3xl font-medium">Gửi Báo Cáo QC</button>
+            <button onclick="resetQC()" class="flex-1 py-4 border border-gray-300 rounded-3xl font-medium">Reset</button>
           </div>
         </div>
       </div>
@@ -121,65 +209,78 @@
 
     <!-- 3. NCR / CAPA -->
     <div id="ncr" class="page flex-1 overflow-auto p-8">
-      <h1 class="text-3xl font-bold mb-6">Quản lý NCR / CAPA</h1>
-      <div class="grid grid-cols-4 gap-6">
-        <div class="bg-white rounded-3xl p-6"><h3 class="font-semibold">Mới nhận (New)</h3><div class="mt-4 p-4 border rounded-2xl">NCR-2024-089 <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full">Critical</span></div></div>
-        <div class="bg-white rounded-3xl p-6"><h3 class="font-semibold">Điều tra (Investigation)</h3><div class="mt-4 p-4 border rounded-2xl">NCR-2024-085 <span class="bg-amber-500 text-white text-xs px-3 py-1 rounded-full">Major</span></div></div>
-        <div class="bg-white rounded-3xl p-6"><h3 class="font-semibold">Lập kế hoạch (Plan)</h3><div class="mt-4 p-4 border rounded-2xl">NCR-2024-082 <span class="bg-blue-500 text-white text-xs px-3 py-1 rounded-full">Minor</span></div></div>
-        <div class="bg-white rounded-3xl p-6"><h3 class="font-semibold">Xác minh (Verification)</h3><div class="mt-4 p-4 border rounded-2xl">NCR-2024-078</div></div>
+      <div class="flex justify-between items-center">
+        <h1 class="text-3xl font-bold">Quản lý NCR / CAPA</h1>
+        <button onclick="createNewNCR()" class="bg-blue-600 text-white px-6 py-3 rounded-3xl flex items-center gap-2">
+          <i class="fas fa-plus"></i> Tạo NCR Mới
+        </button>
+      </div>
+      <div class="grid grid-cols-4 gap-6 mt-10">
+        <div class="bg-white p-6 rounded-3xl"><h3 class="font-semibold">Mới nhận (1)</h3><div class="mt-6 p-5 border rounded-2xl">NCR-2024-089 - Lỗi hiển thị Panel</div></div>
+        <div class="bg-white p-6 rounded-3xl"><h3 class="font-semibold">Điều tra (1)</h3><div class="mt-6 p-5 border rounded-2xl">NCR-2024-085 - Trầy xước vỏ</div></div>
+        <div class="bg-white p-6 rounded-3xl"><h3 class="font-semibold">Lập kế hoạch (1)</h3><div class="mt-6 p-5 border rounded-2xl">NCR-2024-082 - Lỗi Bluetooth</div></div>
+        <div class="bg-white p-6 rounded-3xl"><h3 class="font-semibold">Xác minh (1)</h3><div class="mt-6 p-5 border rounded-2xl">NCR-2024-078 - Hồng cảm biến</div></div>
       </div>
     </div>
 
     <!-- 4. RECORDS ARCHIVE -->
     <div id="records" class="page flex-1 overflow-auto p-8">
       <h1 class="text-3xl font-bold">Lưu trữ Hồ sơ Kiểm tra</h1>
-      <div class="grid grid-cols-4 gap-6 mt-8">
-        <div class="bg-white rounded-3xl p-6 text-center"><p class="text-5xl font-bold">12,845</p><p>Tổng Hồ sơ (Tháng này)</p></div>
-        <div class="bg-white rounded-3xl p-6 text-center"><p class="text-5xl font-bold text-green-600">98.2%</p><p>Tỷ lệ Pass trung bình</p></div>
-        <div class="bg-white rounded-3xl p-6 text-center"><p class="text-5xl font-bold">231</p><p>Hồ sơ lỗi (NCR)</p></div>
-        <div class="bg-white rounded-3xl p-6 text-center"><p class="text-5xl font-bold">4,200</p><p>Đã Audit</p></div>
-      </div>
-      <div class="mt-10 bg-white rounded-3xl p-6">
-        <p class="font-medium mb-4">Kết quả tìm thấy (1,245 hồ sơ)</p>
-        <!-- Table demo -->
-        <table class="w-full text-sm"><thead class="bg-gray-50"><tr><th class="p-4 text-left">Mã Hồ sơ</th><th>Thời gian</th><th>Loại</th><th>Model</th><th>Kết quả</th></tr></thead><tbody class="divide-y"><tr><td class="p-4">INS-2024-001</td><td>2024-05-20 08:30</td><td>IQC</td><td>SM-G998B</td><td><span class="bg-green-100 text-green-700 px-3 py-1 rounded-3xl text-xs">Pass</span></td></tr></tbody></table>
+      <div class="grid grid-cols-4 gap-6 mt-10">
+        <div class="bg-white rounded-3xl p-8 text-center"><p class="text-6xl font-bold">12,845</p><p class="mt-2 text-gray-600">Tổng hồ sơ tháng này</p></div>
+        <div class="bg-white rounded-3xl p-8 text-center"><p class="text-6xl font-bold text-green-600">98.2%</p><p class="mt-2 text-gray-600">Tỷ lệ Pass trung bình</p></div>
+        <div class="bg-white rounded-3xl p-8 text-center"><p class="text-6xl font-bold">231</p><p class="mt-2 text-gray-600">Hồ sơ lỗi (NCR)</p></div>
+        <div class="bg-white rounded-3xl p-8 text-center"><p class="text-6xl font-bold">4,200</p><p class="mt-2 text-gray-600">Đã Audit</p></div>
       </div>
     </div>
 
     <!-- 5. DEVICE & AI -->
     <div id="device" class="page flex-1 overflow-auto p-8">
       <h1 class="text-3xl font-bold">Cấu hình Thiết bị & AI</h1>
-      <div class="grid grid-cols-4 gap-6 mt-8">
-        <div class="bg-white rounded-3xl p-6 text-center"><p class="text-5xl font-bold">24</p><p>Tổng Thiết bị</p></div>
-        <div class="bg-white rounded-3xl p-6 text-center"><p class="text-5xl font-bold">21</p><p>Đang hoạt động</p></div>
-        <div class="bg-white rounded-3xl p-6 text-center"><p class="text-5xl font-bold text-red-600">1</p><p>Cảnh báo lỗi</p></div>
-        <div class="bg-white rounded-3xl p-6 text-center"><p class="text-5xl font-bold text-blue-600">98.2%</p><p>Hiệu suất AI</p></div>
+      <div class="grid grid-cols-4 gap-6 mt-10">
+        <div class="bg-white rounded-3xl p-8 text-center"><p class="text-6xl font-bold">24</p><p>Tổng thiết bị</p></div>
+        <div class="bg-white rounded-3xl p-8 text-center"><p class="text-6xl font-bold">21</p><p>Đang hoạt động</p></div>
+        <div class="bg-white rounded-3xl p-8 text-center"><p class="text-6xl font-bold text-red-600">1</p><p>Cảnh báo lỗi</p></div>
+        <div class="bg-white rounded-3xl p-8 text-center"><p class="text-6xl font-bold text-blue-600">98.2%</p><p>Hiệu suất AI</p></div>
       </div>
-      <p class="text-center text-gray-400 mt-12">📡 Danh sách máy đo & Cảm biến + Phân tích AI (giống ảnh bạn gửi)</p>
+      <div class="mt-10 bg-white rounded-3xl p-8">
+        <h2 class="font-semibold mb-6">Mô hình AI phân tích chất lượng</h2>
+        <p class="text-gray-600">QC-Predict-v4.2 • Stable • Độ nhạy phát hiện bất thường: 75%</p>
+      </div>
     </div>
 
   </div>
 </div>
 
 <script>
-  function showPage(page) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(page).classList.add('active');
-    
-    document.querySelectorAll('.sidebar-link').forEach(link => link.classList.remove('active'));
-    document.getElementById('nav-' + page).classList.add('active');
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+
+    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+    document.getElementById('nav-' + pageId).classList.add('active');
   }
 
-  function selectLot(el) {
-    document.querySelectorAll('.border-2.border-blue-600').forEach(e => e.classList.remove('border-blue-600', 'bg-blue-50'));
-    el.classList.add('border-blue-600', 'bg-blue-50');
+  function createNCR() {
+    alert("✅ NCR đã được tạo tự động từ kết quả kiểm tra!");
   }
 
-  function markFail() { alert('✅ Đã đánh dấu KHÔNG ĐẠT và tạo NCR tự động!'); }
-  function submitQC() { alert('📤 Báo cáo QC đã được gửi thành công!'); }
+  function submitQCReport() {
+    alert("📤 Báo cáo QC đã được gửi thành công!");
+  }
 
-  // Tailwind
-  tailwind.config = { content: ["./**/*.{html,js}"] };
+  function resetQC() {
+    if (confirm("Reset toàn bộ dữ liệu kiểm tra?")) {
+      alert("Dữ liệu đã được reset.");
+    }
+  }
+
+  function createNewNCR() {
+    alert("Mở form tạo NCR mới...");
+  }
+
+  // Khởi tạo mặc định
+  tailwind.config = { content: ["**/*.{html,js}"] };
 </script>
 </body>
 </html>
